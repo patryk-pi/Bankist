@@ -74,7 +74,7 @@ document.querySelector('.nav__links').addEventListener('click', e => {
 
 // Tabbed component
 
-tabsContainer.addEventListener('click', e=> {
+tabsContainer.addEventListener('click', e => {
     const clicked = e.target.closest('.operations__tab'); // Zwarca najblizszy operations__tab od klikniecia
 
     if (!clicked) return; // Jesli nie ma opeations__tab na clicku to przerwij
@@ -84,6 +84,8 @@ tabsContainer.addEventListener('click', e=> {
     tabsContent.forEach(t => t.classList.remove('operations__content--active'));
     document.querySelector(`.operations__content--${clicked.dataset.tab}`).classList.add('operations__content--active');
 });
+
+// Hover effect
 
 const handelHover = (e) => {
     if (e.target.classList.contains('nav__link')) {
@@ -101,4 +103,36 @@ const handelHover = (e) => {
 
 nav.addEventListener('mouseover', handelHover.bind(0.5));
 
-nav.addEventListener('mouseout',handelHover.bind(1));
+nav.addEventListener('mouseout', handelHover.bind(1));
+
+
+// STICKY NAVIGATION
+
+const header = document.querySelector('.header');
+const navHeight = nav.getBoundingClientRect().height;
+
+const stickyNav = entries => {
+    const [entry] = entries;
+
+    if (!entry.isIntersecting) nav.classList.add('sticky');
+    else nav.classList.remove('sticky')
+}
+
+const headerObserver = new IntersectionObserver(stickyNav, {
+    root: null,
+    threshold: 0,
+    rootMargin: `-${navHeight}px`,
+});
+
+headerObserver.observe(header);
+
+/* LEGACY CODE
+
+const initCoords = section1.getBoundingClientRect();
+
+window.addEventListener('scroll', () => {
+    if (window.scrollY > initCoords.top) nav.classList.add('sticky');
+    else nav.classList.remove('sticky');
+});*/
+
+
